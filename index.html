@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <title>Magical Blob Evolution ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet" />
+    <style>
+        /* BASE STYLES */
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(145deg, #ffe5f9, #fdd0ff);
+            font-family: 'Cherry Bomb One', cursive;
+            text-align: center;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        h1 {
+            font-size: clamp(24px, 3.5vw, 48px);
+            margin: 30px 10px 10px;
+            color: #ff69b4;
+            text-shadow: 2px 2px #fff0f6;
+        }
+
+        #blob {
+            width: clamp(120px, 40vw, 180px);
+            height: clamp(120px, 40vw, 180px);
+            border-radius: 50%;
+            margin: 50px auto 20px;
+            transition: transform 0.2s ease, box-shadow 0.2s;
+            position: relative;
+            background: radial-gradient(circle at 40% 40%, #ffb6d9, #ff69b4);
+            box-shadow: 0 0 30px #ffb0e1;
+            touch-action: manipulation;
+            cursor: pointer;
+        }
+
+        #blob.happy {
+            transform: scale(1.1);
+            box-shadow: 0 0 50px #ff8ed6;
+        }
+
+        .face {
+            position: absolute;
+            top: 33%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: clamp(24px, 6vw, 45px);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        #count {
+            font-size: clamp(18px, 5vw, 28px);
+            color: #ff4fa2;
+            background: #fff0f6;
+            padding: 8px 20px;
+            border-radius: 30px;
+            display: inline-block;
+            box-shadow: 0 0 10px #ffbde0;
+            margin: 0 10px 10px;
+            user-select: none;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: clamp(18px, 5vw, 28px);
+            color: #ff4fa2;
+            animation: floatUp 1s ease-out forwards;
+            pointer-events: none;
+            user-select: none;
+            z-index: 9999;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.5);
+            }
+        }
+
+        #accessory {
+            position: absolute;
+            top: -20%;
+            left: 38%;
+            font-size: clamp(24px, 7vw, 40px);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        #message {
+            font-size: clamp(16px, 4vw, 24px);
+            color: #d23d87;
+            margin-top: 15px;
+            height: 2.5em;
+            user-select: none;
+            min-height: 30px;
+        }
+
+        /* 🎵 Music UI top-right */
+        #music-ui {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            z-index: 10000;
+            text-align: right;
+            user-select: none;
+        }
+
+        #music-toggle {
+            padding: 8px 14px;
+            background: #ff69b4;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: clamp(14px, 4vw, 22px);
+            box-shadow: 0 4px 10px #ffb6d9;
+            transition: background 0.3s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            margin-bottom: 8px;
+        }
+
+        #music-toggle:hover {
+            background: #ff4fa2;
+        }
+
+        #spotify-widget {
+            margin-top: 10px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+            user-select: none;
+            width: 250px;
+            max-width: 90vw;
+        }
+
+        #spotify-widget iframe {
+            width: 100%;
+            height: 80px;
+            border-radius: 12px;
+            pointer-events: auto;
+        }
+
+        #reset-btn {
+            padding: 8px 14px;
+            background: #ff4fa4;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: clamp(14px, 4vw, 22px);
+            box-shadow: 0 4px 10px #ffb6d9;
+            transition: background 0.3s ease;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            margin-left: 12px;
+            vertical-align: middle;
+        }
+
+        #reset-btn:hover {
+            background: #e64593;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1>✨ Pet the Magical Blob ✨</h1>
+    <div id="blob" role="button" tabindex="0" aria-label="Magical blob, click to pet">
+        <div id="accessory" aria-hidden="true">🎀</div>
+        <div class="face" aria-hidden="true">uwu</div>
+    </div>
+    <p><span id="count" aria-live="polite">Pats: 0</span></p>
+    <div id="message" aria-live="polite" role="status"></div>
+
+    <!-- Music and reset UI -->
+    <div id="music-ui">
+        <button id="music-toggle" aria-pressed="false" aria-label="Toggle cozy music widget">🎵CLICK</button>
+        <button id="reset-btn" aria-label="Reset pats and progress">🔄 Reset</button>
+        <div id="spotify-widget" aria-hidden="true">
+            <iframe style="border-radius:12px"
+                src="https://open.spotify.com/embed/track/5F6ekGcdu623mkhTVgk64Z?utm_source=generator" width="100%"
+                height="400" frameBorder="0" allowfullscreen=""
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy"></iframe>
+        </div>
+    </div>
+
+    <!-- Local squish sound -->
+    <audio id="squishSound" src="./src/squash.wav" preload="auto"></audio>
+
+    <script>
+        const blob = document.getElementById("blob");
+        const countText = document.getElementById("count");
+        const squishSound = document.getElementById("squishSound");
+        const accessory = document.getElementById("accessory");
+        const message = document.getElementById("message");
+
+        const musicToggle = document.getElementById("music-toggle");
+        const spotifyWidget = document.getElementById("spotify-widget");
+        const resetBtn = document.getElementById("reset-btn");
+
+        let count = parseInt(localStorage.getItem("pats")) || 0;
+        updateDisplay();
+
+        const messages = [
+            { milestone: 5, text: "You found the sweet spot! 🍬" },
+            { milestone: 10, text: "Blob is feeling the love! 💞" },
+            { milestone: 20, text: "You are a pro petter! 🐾" },
+            { milestone: 35, text: "Blob has evolved! 👑" },
+            { milestone: 50, text: "You’ve unlocked blob wings! 🪽" },
+            { milestone: 75, text: "Blob learned to dance! 💃" },
+            { milestone: 100, text: "You are the ultimate petter! 🌈" },
+            { milestone: 150, text: "Blob's heart is bursting! 💗💗" }
+        ];
+
+        musicToggle.addEventListener("click", () => {
+            if (spotifyWidget.style.display === "none" || spotifyWidget.style.display === "") {
+                spotifyWidget.style.display = "block";
+                musicToggle.setAttribute("aria-pressed", "true");
+                spotifyWidget.setAttribute("aria-hidden", "false");
+            } else {
+                spotifyWidget.style.display = "none";
+                musicToggle.setAttribute("aria-pressed", "false");
+                spotifyWidget.setAttribute("aria-hidden", "true");
+            }
+        });
+
+        resetBtn.addEventListener("click", () => {
+            count = 0;
+            localStorage.setItem("pats", count);
+            updateDisplay();
+            message.textContent = "Reset complete! Start petting again 💖";
+            setTimeout(() => { message.textContent = ""; }, 4000);
+        });
+
+        // Pet action — keyboard accessible too
+        blob.addEventListener("click", petBlob);
+        blob.addEventListener("keydown", (e) => {
+            if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+                e.preventDefault();
+                petBlob(e);
+            }
+        });
+
+        function petBlob(e) {
+            count++;
+            localStorage.setItem("pats", count);
+            updateDisplay();
+            checkMilestone();
+
+            blob.classList.add("happy");
+
+            // Play your local squish sound
+            squishSound.currentTime = 0;
+            squishSound.play();
+
+            const heart = document.createElement("div");
+            heart.className = "heart";
+            if (e.clientX && e.clientY) {
+                heart.style.left = `${e.clientX}px`;
+                heart.style.top = `${e.clientY}px`;
+            } else {
+                const rect = blob.getBoundingClientRect();
+                heart.style.left = `${rect.left + rect.width / 2}px`;
+                heart.style.top = `${rect.top + rect.height / 2}px`;
+            }
+            document.body.appendChild(heart);
+
+            setTimeout(() => {
+                blob.classList.remove("happy");
+                heart.remove();
+            }, 1000);
+        }
+
+        function updateDisplay() {
+            countText.textContent = `Pats: ${count}`;
+            updateBlobEvolution();
+        }
+
+        function updateBlobEvolution() {
+            if (count >= 150) accessory.textContent = "💗💗";
+            else if (count >= 100) accessory.textContent = "🌈";
+            else if (count >= 75) accessory.textContent = "💃";
+            else if (count >= 50) accessory.textContent = "🪽";
+            else if (count >= 35) accessory.textContent = "👑";
+            else if (count >= 20) accessory.textContent = "🐾";
+            else if (count >= 10) accessory.textContent = "💞";
+            else if (count >= 5) accessory.textContent = "🍬";
+            else accessory.textContent = "🎀";
+        }
+
+        function checkMilestone() {
+            const msg = messages.find(m => m.milestone === count);
+            if (msg) {
+                message.textContent = msg.text;
+                setTimeout(() => {
+                    message.textContent = "";
+                }, 4000);
+            }
+        }
+    </script>
+</body>
+
+</html>
