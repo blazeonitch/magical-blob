@@ -1,0 +1,226 @@
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(145deg, #ffe5f9, #fdd0ff);
+  font-family: "Cherry Bomb One", cursive;
+  text-align: center;
+  overflow-x: hidden;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  position: relative;
+}
+
+h1 {
+  font-size: clamp(24px, 3.5vw, 48px);
+  margin: 30px 10px 10px;
+  color: #ff69b4;
+  text-shadow: 2px 2px #fff0f6;
+}
+
+#blob {
+  width: clamp(120px, 40vw, 180px);
+  height: clamp(120px, 40vw, 180px);
+  border-radius: 50%;
+  margin: 50px auto 20px;
+  transition: transform 0.2s ease, box-shadow 0.2s;
+  position: relative;
+  background: radial-gradient(circle at 40% 40%, #ffb6d9, #ff69b4);
+  box-shadow: 0 0 30px #ffb0e1;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+#blob.happy {
+  transform: scale(1.1);
+  box-shadow: 0 0 50px #ff8ed6;
+}
+
+.face {
+  position: absolute;
+  top: 33%;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(24px, 6vw, 45px);
+  user-select: none;
+  pointer-events: none;
+}
+
+#count {
+  font-size: clamp(18px, 5vw, 28px);
+  color: #ff4fa2;
+  background: #fff0f6;
+  padding: 8px 20px;
+  border-radius: 30px;
+  display: inline-block;
+  box-shadow: 0 0 10px #ffbde0;
+  margin: 0 10px 10px;
+}
+
+.heart {
+  position: absolute;
+  font-size: clamp(18px, 5vw, 30px);
+  color: #ff4fa2;
+  animation: floatPop 1s ease-out forwards;
+  pointer-events: none;
+  user-select: none;
+  z-index: 9999;
+  transform: rotate(0deg);
+}
+
+.sparkle {
+  position: absolute;
+  font-size: clamp(12px, 4vw, 22px);
+  color: #ffd6f6;
+  animation: sparkleOut 0.8s ease-out forwards;
+  pointer-events: none;
+  user-select: none;
+  z-index: 9998;
+}
+
+@keyframes floatPop {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1) rotate(0deg);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-100px) scale(1.8) rotate(30deg);
+  }
+}
+
+@keyframes sparkleOut {
+  0% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateY(-80px) scale(1.5);
+  }
+}
+
+#accessory {
+  position: absolute;
+  top: -20%;
+  left: 38%;
+  font-size: clamp(24px, 7vw, 40px);
+  pointer-events: none;
+  user-select: none;
+}
+
+#message {
+  font-size: clamp(16px, 4vw, 24px);
+  color: #d23d87;
+  margin-top: 15px;
+  height: 2.5em;
+  user-select: none;
+  min-height: 30px;
+}
+
+#reset-btn {
+  padding: 8px 14px;
+  background: #ff4fa4;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: clamp(14px, 4vw, 22px);
+  box-shadow: 0 4px 10px #ffb6d9;
+  transition: background 0.3s ease;
+  user-select: none;
+  margin-top: 12px;
+}
+
+#reset-btn:hover {
+  background: #e64593;
+}
+
+/* Volume slider container */
+#volume-container {
+  position: fixed;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  background: #ffb6d9cc;
+  border-radius: 25px;
+  padding: 10px 8px;
+  box-shadow: 0 0 10px #ff8ed6;
+  z-index: 10000;
+  user-select: none;
+
+  /* Make container height = slider length + padding */
+  height: 170px;
+  /* length */
+  width: 40px;
+  /* thickness */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#volume-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 150px;
+  /* slider length (after rotation) */
+  height: 30px;
+  /* slider thickness */
+  transform: rotate(-90deg);
+  cursor: pointer;
+  background: transparent;
+  outline: none;
+  border-radius: 10px;
+}
+
+/* Track */
+#volume-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 10px;
+  background: #ff69b4;
+  border-radius: 25px;
+}
+
+#volume-slider::-moz-range-track {
+  width: 100%;
+  height: 10px;
+  background: #ff69b4;
+  border-radius: 25px;
+}
+
+/* Thumb */
+#volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  background: #fff0f6;
+  border: 2px solid #ff4fa2;
+  border-radius: 50%;
+  cursor: pointer;
+  margin-top: -9px;
+  /* centers thumb */
+  box-shadow: 0 0 8px #ff4fa2aa;
+  transition: background 0.3s ease;
+}
+
+#volume-slider::-webkit-slider-thumb:hover {
+  background: #ffd6e8;
+}
+
+#volume-slider::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  background: #fff0f6;
+  border: 2px solid #ff4fa2;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 8px #ff4fa2aa;
+  transition: background 0.3s ease;
+}
+
+#volume-slider::-moz-range-thumb:hover {
+  background: #ffd6e8;
+}
