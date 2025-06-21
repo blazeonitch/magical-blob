@@ -3,11 +3,10 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Magical Blob Evolution ✨</title>
     <link href="https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap" rel="stylesheet" />
     <style>
-        /* BASE STYLES */
         body {
             margin: 0;
             padding: 0;
@@ -17,6 +16,7 @@
             overflow-x: hidden;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
+            position: relative;
         }
 
         h1 {
@@ -64,20 +64,42 @@
             display: inline-block;
             box-shadow: 0 0 10px #ffbde0;
             margin: 0 10px 10px;
-            user-select: none;
         }
 
         .heart {
             position: absolute;
-            font-size: clamp(18px, 5vw, 28px);
+            font-size: clamp(18px, 5vw, 30px);
             color: #ff4fa2;
-            animation: floatUp 1s ease-out forwards;
+            animation: floatPop 1s ease-out forwards;
             pointer-events: none;
             user-select: none;
             z-index: 9999;
+            transform: rotate(0deg);
         }
 
-        @keyframes floatUp {
+        .sparkle {
+            position: absolute;
+            font-size: clamp(12px, 4vw, 22px);
+            color: #ffd6f6;
+            animation: sparkleOut 0.8s ease-out forwards;
+            pointer-events: none;
+            user-select: none;
+            z-index: 9998;
+        }
+
+        @keyframes floatPop {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) scale(1.8) rotate(30deg);
+            }
+        }
+
+        @keyframes sparkleOut {
             0% {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -85,7 +107,7 @@
 
             100% {
                 opacity: 0;
-                transform: translateY(-100px) scale(1.5);
+                transform: translateY(-80px) scale(1.5);
             }
         }
 
@@ -107,51 +129,6 @@
             min-height: 30px;
         }
 
-        /* 🎵 Music UI top-right */
-        #music-ui {
-            position: fixed;
-            top: 15px;
-            right: 15px;
-            z-index: 10000;
-            text-align: right;
-            user-select: none;
-        }
-
-        #music-toggle {
-            padding: 8px 14px;
-            background: #ff69b4;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: clamp(14px, 4vw, 22px);
-            box-shadow: 0 4px 10px #ffb6d9;
-            transition: background 0.3s ease;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            margin-bottom: 8px;
-        }
-
-        #music-toggle:hover {
-            background: #ff4fa2;
-        }
-
-        #spotify-widget {
-            margin-top: 10px;
-            display: none;
-            animation: fadeIn 0.5s ease;
-            user-select: none;
-            width: 250px;
-            max-width: 90vw;
-        }
-
-        #spotify-widget iframe {
-            width: 100%;
-            height: 80px;
-            border-radius: 12px;
-            pointer-events: auto;
-        }
-
         #reset-btn {
             padding: 8px 14px;
             background: #ff4fa4;
@@ -163,25 +140,98 @@
             box-shadow: 0 4px 10px #ffb6d9;
             transition: background 0.3s ease;
             user-select: none;
-            -webkit-tap-highlight-color: transparent;
-            margin-left: 12px;
-            vertical-align: middle;
+            margin-top: 12px;
         }
 
         #reset-btn:hover {
             background: #e64593;
         }
 
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
+        /* Volume slider container */
+        #volume-container {
+            position: fixed;
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+            background: #ffb6d9cc;
+            border-radius: 25px;
+            padding: 10px 8px;
+            box-shadow: 0 0 10px #ff8ed6;
+            z-index: 10000;
+            user-select: none;
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            /* Make container height = slider length + padding */
+            height: 170px;
+            /* length */
+            width: 40px;
+            /* thickness */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 150px;
+            /* slider length (after rotation) */
+            height: 30px;
+            /* slider thickness */
+            transform: rotate(-90deg);
+            cursor: pointer;
+            background: transparent;
+            outline: none;
+            border-radius: 10px;
+        }
+
+        /* Track */
+        #volume-slider::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 10px;
+            background: #ff69b4;
+            border-radius: 25px;
+        }
+
+        #volume-slider::-moz-range-track {
+            width: 100%;
+            height: 10px;
+            background: #ff69b4;
+            border-radius: 25px;
+        }
+
+        /* Thumb */
+        #volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 28px;
+            height: 28px;
+            background: #fff0f6;
+            border: 2px solid #ff4fa2;
+            border-radius: 50%;
+            cursor: pointer;
+            margin-top: -9px;
+            /* centers thumb */
+            box-shadow: 0 0 8px #ff4fa2aa;
+            transition: background 0.3s ease;
+        }
+
+        #volume-slider::-webkit-slider-thumb:hover {
+            background: #ffd6e8;
+        }
+
+        #volume-slider::-moz-range-thumb {
+            width: 28px;
+            height: 28px;
+            background: #fff0f6;
+            border: 2px solid #ff4fa2;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 0 8px #ff4fa2aa;
+            transition: background 0.3s ease;
+        }
+
+        #volume-slider::-moz-range-thumb:hover {
+            background: #ffd6e8;
         }
     </style>
 </head>
@@ -189,38 +239,34 @@
 <body>
     <h1>✨ Pet the Magical Blob ✨</h1>
     <div id="blob" role="button" tabindex="0" aria-label="Magical blob, click to pet">
-        <div id="accessory" aria-hidden="true">🎀</div>
-        <div class="face" aria-hidden="true">uwu</div>
+        <div id="accessory">🎀</div>
+        <div class="face">uwu</div>
     </div>
-    <p><span id="count" aria-live="polite">Pats: 0</span></p>
-    <div id="message" aria-live="polite" role="status"></div>
+    <p><span id="count">Pats: 0</span></p>
+    <div id="message" role="status"></div>
+    <button id="reset-btn">🔄 Reset</button>
 
-    <!-- Music and reset UI -->
-    <div id="music-ui">
-        <button id="music-toggle" aria-pressed="false" aria-label="Toggle cozy music widget">🎵CLICK</button>
-        <button id="reset-btn" aria-label="Reset pats and progress">🔄 Reset</button>
-        <div id="spotify-widget" aria-hidden="true">
-            <iframe style="border-radius:12px"
-                src="https://open.spotify.com/embed/track/5F6ekGcdu623mkhTVgk64Z?utm_source=generator" width="100%"
-                height="400" frameBorder="0" allowfullscreen=""
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                loading="lazy"></iframe>
-        </div>
+    <!-- Sounds -->
+    <audio id="squish1" src="./src/squish1.wav" preload="auto"></audio>
+    <audio id="squish2" src="./src/squish2.wav" preload="auto"></audio>
+    <audio id="bg-music" src="./bg-soft.mp3" autoplay loop muted preload="auto"></audio>
+
+    <!-- Volume slider -->
+    <div id="volume-container" title="Adjust Background Music Volume">
+        <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="0.1"
+            aria-label="Background music volume slider" />
     </div>
 
-    <!-- Local squish sound -->
-    <audio id="squishSound" src="./src/bark.mp3" preload="auto"></audio>
 
     <script>
         const blob = document.getElementById("blob");
         const countText = document.getElementById("count");
-        const squishSound = document.getElementById("squishSound");
+        const bgMusic = document.getElementById("bg-music");
         const accessory = document.getElementById("accessory");
         const message = document.getElementById("message");
-
-        const musicToggle = document.getElementById("music-toggle");
-        const spotifyWidget = document.getElementById("spotify-widget");
         const resetBtn = document.getElementById("reset-btn");
+        const squishSounds = [document.getElementById("squish1"), document.getElementById("squish2")];
+        const volumeSlider = document.getElementById("volume-slider");
 
         let count = parseInt(localStorage.getItem("pats")) || 0;
         updateDisplay();
@@ -232,19 +278,48 @@
             { milestone: 35, text: "Blob has evolved! 👑" },
             { milestone: 50, text: "You’ve unlocked blob wings! 🪽" },
             { milestone: 75, text: "Blob learned to dance! 💃" },
-            { milestone: 100, text: "You are the ultimate petter! 🌈" },
-            { milestone: 150, text: "Blob's heart is bursting! 💗💗" }
+            { milestone: 100, text: "Blob sings with joy! 🎤" },
+            { milestone: 125, text: "Blob can now fly! 🪶" },
+            { milestone: 150, text: "Blob's heart is bursting! 💗💗" },
+            { milestone: 175, text: "Blob discovered glitter magic! ✨" },
+            { milestone: 200, text: "You’ve unlocked Blob Ultra! 🌟" },
+            { milestone: 250, text: "Blob is now your best friend! 🫶" },
+            { milestone: 300, text: "THE ULTIMATE PATTING CHAMPION! 👑✨🎉" }
         ];
 
-        musicToggle.addEventListener("click", () => {
-            if (spotifyWidget.style.display === "none" || spotifyWidget.style.display === "") {
-                spotifyWidget.style.display = "block";
-                musicToggle.setAttribute("aria-pressed", "true");
-                spotifyWidget.setAttribute("aria-hidden", "false");
+        // Initialize bg music volume & muted
+        bgMusic.volume = volumeSlider.value;
+        bgMusic.muted = true;
+
+        // Unmute and play on first user interaction (click or key)
+        function enableAudio() {
+            if (bgMusic.muted) {
+                bgMusic.muted = false;
+                bgMusic.volume = volumeSlider.value;
+                bgMusic.play().catch(() => { /* ignore play errors */ });
+            }
+            window.removeEventListener('click', enableAudio);
+            window.removeEventListener('keydown', enableAudio);
+        }
+        window.addEventListener('click', enableAudio);
+        window.addEventListener('keydown', enableAudio);
+
+        // Volume slider changes bg music volume
+        volumeSlider.addEventListener('input', () => {
+            bgMusic.volume = volumeSlider.value;
+            // if volume 0, mute the music, else unmute
+            if (volumeSlider.value == 0) {
+                bgMusic.muted = true;
             } else {
-                spotifyWidget.style.display = "none";
-                musicToggle.setAttribute("aria-pressed", "false");
-                spotifyWidget.setAttribute("aria-hidden", "true");
+                bgMusic.muted = false;
+            }
+        });
+
+        blob.addEventListener("click", petBlob);
+        blob.addEventListener("keydown", e => {
+            if (["Enter", " ", "Spacebar"].includes(e.key)) {
+                e.preventDefault();
+                petBlob(e);
             }
         });
 
@@ -253,16 +328,7 @@
             localStorage.setItem("pats", count);
             updateDisplay();
             message.textContent = "Reset complete! Start petting again 💖";
-            setTimeout(() => { message.textContent = ""; }, 4000);
-        });
-
-        // Pet action — keyboard accessible too
-        blob.addEventListener("click", petBlob);
-        blob.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
-                e.preventDefault();
-                petBlob(e);
-            }
+            setTimeout(() => message.textContent = "", 4000);
         });
 
         function petBlob(e) {
@@ -272,26 +338,33 @@
             checkMilestone();
 
             blob.classList.add("happy");
+            const sound = squishSounds[Math.floor(Math.random() * squishSounds.length)];
+            sound.currentTime = 0;
+            sound.play();
 
-            // Play your local squish sound
-            squishSound.currentTime = 0;
-            squishSound.play();
+            const rect = blob.getBoundingClientRect();
+            const x = e.clientX || rect.left + rect.width / 2;
+            const y = e.clientY || rect.top + rect.height / 2;
 
             const heart = document.createElement("div");
             heart.className = "heart";
-            if (e.clientX && e.clientY) {
-                heart.style.left = `${e.clientX}px`;
-                heart.style.top = `${e.clientY}px`;
-            } else {
-                const rect = blob.getBoundingClientRect();
-                heart.style.left = `${rect.left + rect.width / 2}px`;
-                heart.style.top = `${rect.top + rect.height / 2}px`;
-            }
+            heart.textContent = "💖";
+            heart.style.left = `${x}px`;
+            heart.style.top = `${y}px`;
+
+            const sparkle = document.createElement("div");
+            sparkle.className = "sparkle";
+            sparkle.textContent = "✨";
+            sparkle.style.left = `${x + 20}px`;
+            sparkle.style.top = `${y}px`;
+
             document.body.appendChild(heart);
+            document.body.appendChild(sparkle);
 
             setTimeout(() => {
                 blob.classList.remove("happy");
                 heart.remove();
+                sparkle.remove();
             }, 1000);
         }
 
@@ -301,8 +374,13 @@
         }
 
         function updateBlobEvolution() {
-            if (count >= 150) accessory.textContent = "💗💗";
-            else if (count >= 100) accessory.textContent = "🌈";
+            if (count >= 300) accessory.textContent = "👑✨🎉";
+            else if (count >= 250) accessory.textContent = "🫶";
+            else if (count >= 200) accessory.textContent = "🌟";
+            else if (count >= 175) accessory.textContent = "✨";
+            else if (count >= 150) accessory.textContent = "💗💗";
+            else if (count >= 125) accessory.textContent = "🪶";
+            else if (count >= 100) accessory.textContent = "🎤";
             else if (count >= 75) accessory.textContent = "💃";
             else if (count >= 50) accessory.textContent = "🪽";
             else if (count >= 35) accessory.textContent = "👑";
@@ -316,9 +394,7 @@
             const msg = messages.find(m => m.milestone === count);
             if (msg) {
                 message.textContent = msg.text;
-                setTimeout(() => {
-                    message.textContent = "";
-                }, 4000);
+                setTimeout(() => message.textContent = "", 4000);
             }
         }
     </script>
